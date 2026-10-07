@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: unzip -q Cidades_ESG_Inteligentes_Entrega.zip
+      - run: unzip -q Cidades_ESG_Inteligentes_Entrega_v2.zip
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: unzip -q Cidades_ESG_Inteligentes_Entrega.zip
+      - run: unzip -q Cidades_ESG_Inteligentes_Entrega_v2.zip
       - run: cp .env.example .env && docker compose --profile staging up --build -d
         working-directory: entrega-cidades-esg-inteligentes
       - run: for i in {1..18}; do curl -fsS http://localhost:8081/actuator/health && exit 0; sleep 5; done; exit 1
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: unzip -q Cidades_ESG_Inteligentes_Entrega.zip
+      - run: unzip -q Cidades_ESG_Inteligentes_Entrega_v2.zip
       - run: cp .env.example .env && docker compose --profile production up --build -d
         working-directory: entrega-cidades-esg-inteligentes
       - run: for i in {1..18}; do curl -fsS http://localhost:8082/actuator/health && exit 0; sleep 5; done; exit 1
