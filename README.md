@@ -5,9 +5,9 @@
 
 API REST (Java Spring Boot) para registrar iniciativas de sustentabilidade de cidades, acompanhar o impacto estimado e classificar cada iniciativa nos pilares **Ambiental, Social e Governança (ESG)**. Este repositório aplica o ciclo DevOps completo: build, testes, containerização, orquestração e deploy automatizado em **staging** e **produção**.
 
-**Repositório:** [github.com/JvVeronesi/cidades-esg-inteligentes](https://github.com/JvVeronesi/cidades-esg-inteligentes)  
-**Pipeline:** [GitHub Actions](https://github.com/JvVeronesi/cidades-esg-inteligentes/actions)  
-**Imagem:** [GitHub Packages](https://github.com/users/JvVeronesi/packages?repo_name=cidades-esg-inteligentes)
+**Repositório:** [github.com/alvinhooo/cidades-esg-inteligentes](https://github.com/alvinhooo/cidades-esg-inteligentes)  
+**Pipeline:** [GitHub Actions](https://github.com/alvinhooo/cidades-esg-inteligentes/actions)  
+**Imagem:** [GitHub Packages](https://github.com/users/alvinhooo/packages?repo_name=cidades-esg-inteligentes)
 
 ## Estrutura do projeto
 
@@ -90,7 +90,7 @@ Orquestração (`docker-compose.yml`): dois *profiles* (`staging` e `production`
 
 ## Evidências do funcionamento
 
-As evidências verificáveis ficam disponíveis na [execução do pipeline](https://github.com/JvVeronesi/cidades-esg-inteligentes/actions) e incluem:
+As evidências verificáveis ficam disponíveis na [execução do pipeline](https://github.com/alvinhooo/cidades-esg-inteligentes/actions) e incluem:
 
 - relatório Surefire dos testes;
 - imagem versionada no GHCR com a tag do commit;

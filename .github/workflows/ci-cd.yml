@@ -16,8 +16,8 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '21'
@@ -26,7 +26,7 @@ jobs:
         run: mvn -B clean verify
       - name: Publicar relatório de testes
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: relatorio-testes
           path: target/surefire-reports/
@@ -39,20 +39,20 @@ jobs:
     outputs:
       image: ${{ steps.meta.outputs.image }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Definir nome da imagem (minúsculo)
         id: meta
         run: echo "image=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/cidades-esg-inteligentes:${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
-      - uses: docker/setup-buildx-action@v3
+      - uses: docker/setup-buildx-action@v4
       - name: Login no GHCR
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build (e push, fora de PRs)
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
@@ -73,8 +73,8 @@ jobs:
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD || 'senha_ci_temporaria' }}
       STAGING_PORT: 8081
     steps:
-      - uses: actions/checkout@v4
-      - uses: docker/login-action@v3
+      - uses: actions/checkout@v7
+      - uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -82,7 +82,7 @@ jobs:
       - name: Subir staging (imagem publicada + PostgreSQL)
         run: docker compose --profile staging up -d --no-build --pull always
       - name: Smoke test de staging
-        run: ./scripts/smoke-test.sh 8081 staging evidencias/staging.md
+        run: bash ./scripts/smoke-test.sh 8081 staging evidencias/staging.md
       - name: Logs em caso de falha
         if: failure()
         run: docker compose --profile staging logs
@@ -94,7 +94,7 @@ jobs:
           docker compose --profile staging logs --no-color > evidencias/staging-compose.log
       - name: Publicar evidências do staging
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: evidencias-staging-${{ github.sha }}
           path: evidencias/
@@ -119,8 +119,8 @@ jobs:
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD || 'senha_ci_temporaria' }}
       PRODUCTION_PORT: 8082
     steps:
-      - uses: actions/checkout@v4
-      - uses: docker/login-action@v3
+      - uses: actions/checkout@v7
+      - uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -128,7 +128,7 @@ jobs:
       - name: Subir produção (mesma imagem validada em staging)
         run: docker compose --profile production up -d --no-build --pull always
       - name: Smoke test de produção
-        run: ./scripts/smoke-test.sh 8082 production evidencias/production.md
+        run: bash ./scripts/smoke-test.sh 8082 production evidencias/production.md
       - name: Logs em caso de falha
         if: failure()
         run: docker compose --profile production logs
@@ -140,7 +140,7 @@ jobs:
           docker compose --profile production logs --no-color > evidencias/production-compose.log
       - name: Publicar evidências da produção
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: evidencias-production-${{ github.sha }}
           path: evidencias/
