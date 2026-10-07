@@ -90,7 +90,7 @@ Orquestração (`docker-compose.yml`): dois *profiles* (`staging` e `production`
 
 ## Evidências do funcionamento
 
-As evidências verificáveis ficam disponíveis na [execução do pipeline](https://github.com/alvinhooo/cidades-esg-inteligentes/actions) e incluem:
+As evidências verificáveis ficam disponíveis na [execução final aprovada do pipeline](https://github.com/alvinhooo/cidades-esg-inteligentes/actions/runs/37678226458) e incluem:
 
 - relatório Surefire dos testes;
 - imagem versionada no GHCR com a tag do commit;
@@ -155,4 +155,4 @@ Exemplo de criação (`POST /api/iniciativas`):
 | README.md com instruções e links verificáveis | ☑ |
 | Documentação técnica em PDF | ☑ |
 | Prints anexados ao README e ao PDF | ☐ *(marcar após adicionar os sete arquivos em `docs/evidencias/`)* |
-| Deploy realizado nos ambientes staging e produção | ☐ *(marcar após o workflow ficar verde no GitHub)* |
+| Deploy realizado nos ambientes staging e produção | ☑ |

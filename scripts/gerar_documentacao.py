@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "Documentacao_Tecnica_Cidades_ESG.pdf"
 EVIDENCE_DIR = ROOT / "docs" / "evidencias"
 REPOSITORY = "https://github.com/alvinhooo/cidades-esg-inteligentes"
-ACTIONS = f"{REPOSITORY}/actions"
+ACTIONS = f"{REPOSITORY}/actions/runs/37678226458"
 PACKAGES = "https://github.com/users/alvinhooo/packages?repo_name=cidades-esg-inteligentes"
 
 GREEN = colors.HexColor("#0B6655")
