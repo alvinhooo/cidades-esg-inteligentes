@@ -1,0 +1,45 @@
+name: CI/CD - Cidades ESG Inteligentes
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: unzip -q Cidades_ESG_Inteligentes_Entrega.zip
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: entrega-cidades-esg-inteligentes/pom.xml
+      - run: mvn -B clean verify
+        working-directory: entrega-cidades-esg-inteligentes
+  deploy-staging:
+    needs: test
+    environment: staging
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: unzip -q Cidades_ESG_Inteligentes_Entrega.zip
+      - run: cp .env.example .env && docker compose --profile staging up --build -d
+        working-directory: entrega-cidades-esg-inteligentes
+      - run: for i in {1..18}; do curl -fsS http://localhost:8081/actuator/health && exit 0; sleep 5; done; exit 1
+      - if: always()
+        run: docker compose --profile staging down -v
+        working-directory: entrega-cidades-esg-inteligentes
+  deploy-production:
+    needs: deploy-staging
+    environment: production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: unzip -q Cidades_ESG_Inteligentes_Entrega.zip
+      - run: cp .env.example .env && docker compose --profile production up --build -d
+        working-directory: entrega-cidades-esg-inteligentes
+      - run: for i in {1..18}; do curl -fsS http://localhost:8082/actuator/health && exit 0; sleep 5; done; exit 1
+      - if: always()
+        run: docker compose --profile production down -v
+        working-directory: entrega-cidades-esg-inteligentes
