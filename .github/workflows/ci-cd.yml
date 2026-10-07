@@ -1,0 +1,153 @@
+name: CI/CD - Cidades ESG Inteligentes
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  # 1) BUILD + TESTES (todo PR e todo push)
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Build e testes automatizados
+        run: mvn -B clean verify
+      - name: Publicar relatório de testes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-testes
+          path: target/surefire-reports/
+          if-no-files-found: ignore
+
+  # 2) IMAGEM DOCKER (build uma vez; publica no GHCR fora de PRs)
+  docker-image:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.meta.outputs.image }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Definir nome da imagem (minúsculo)
+        id: meta
+        run: echo "image=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/cidades-esg-inteligentes:${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+      - uses: docker/setup-buildx-action@v3
+      - name: Login no GHCR
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build (e push, fora de PRs)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.image }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # 3) DEPLOY STAGING (somente push na main / execução manual)
+  deploy-staging:
+    needs: docker-image
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment: staging
+    env:
+      IMAGE_NAME: ${{ needs.docker-image.outputs.image }}
+      POSTGRES_DB: esg
+      POSTGRES_USER: esg_user
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD || 'senha_ci_temporaria' }}
+      STAGING_PORT: 8081
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Subir staging (imagem publicada + PostgreSQL)
+        run: docker compose --profile staging up -d --no-build --pull always
+      - name: Smoke test de staging
+        run: ./scripts/smoke-test.sh 8081 staging evidencias/staging.md
+      - name: Logs em caso de falha
+        if: failure()
+        run: docker compose --profile staging logs
+      - name: Registrar logs do staging
+        if: always()
+        run: |
+          mkdir -p evidencias
+          docker compose --profile staging ps --all > evidencias/staging-containers.txt
+          docker compose --profile staging logs --no-color > evidencias/staging-compose.log
+      - name: Publicar evidências do staging
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidencias-staging-${{ github.sha }}
+          path: evidencias/
+          if-no-files-found: warn
+      - name: Estado dos containers
+        if: always()
+        run: docker compose --profile staging ps
+      - name: Encerrar staging
+        if: always()
+        run: docker compose --profile staging down -v
+
+  # 4) DEPLOY PRODUÇÃO (somente após staging aprovado)
+  deploy-production:
+    needs: [docker-image, deploy-staging]
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      IMAGE_NAME: ${{ needs.docker-image.outputs.image }}
+      POSTGRES_DB: esg
+      POSTGRES_USER: esg_user
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD || 'senha_ci_temporaria' }}
+      PRODUCTION_PORT: 8082
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Subir produção (mesma imagem validada em staging)
+        run: docker compose --profile production up -d --no-build --pull always
+      - name: Smoke test de produção
+        run: ./scripts/smoke-test.sh 8082 production evidencias/production.md
+      - name: Logs em caso de falha
+        if: failure()
+        run: docker compose --profile production logs
+      - name: Registrar logs da produção
+        if: always()
+        run: |
+          mkdir -p evidencias
+          docker compose --profile production ps --all > evidencias/production-containers.txt
+          docker compose --profile production logs --no-color > evidencias/production-compose.log
+      - name: Publicar evidências da produção
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidencias-production-${{ github.sha }}
+          path: evidencias/
+          if-no-files-found: warn
+      - name: Estado dos containers
+        if: always()
+        run: docker compose --profile production ps
+      - name: Encerrar produção
+        if: always()
+        run: docker compose --profile production down -v

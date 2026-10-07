@@ -1,0 +1,5 @@
+target/
+.env
+.idea/
+*.iml
+Documentacao_Tecnica_Cidades_ESG.docx
