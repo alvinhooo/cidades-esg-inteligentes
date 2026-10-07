@@ -1,5 +1,5 @@
 # Cidades ESG Inteligentes
-**Disciplina:** DevOps | **Integrante:** Alvaro Miranda, João Victor, Vitor Viana e Leonardo Sabbatini
+**Disciplina:** DevOps | **Integrantes:** Alvaro Miranda, João Victor, Vitor Viana e Leonardo Sabbatini
 API REST para registrar iniciativas de sustentabilidade de cidades, acompanhar o impacto estimado e classificar cada iniciativa nos pilares Ambiental, Social e Governança (ESG).
 ## Como executar localmente com Docker
 1. Copie as variáveis de exemplo: `cp .env.example .env`.
