@@ -15,7 +15,7 @@ O pipeline gera evidências verificáveis sem depender apenas de capturas de tel
 Salve as imagens em `docs/evidencias/` com estes nomes:
 
 1. `01-pipeline-completo.png` - execução da `main` com todos os jobs verdes.
-2. `02-build-e-testes.png` - trecho com `Tests run: 3`, `Failures: 0` e `BUILD SUCCESS`.
+2. `02-build-e-testes.png` - trecho com `Tests run: 4`, `Failures: 0` e `BUILD SUCCESS`.
 3. `03-imagem-ghcr.png` - pacote publicado no GitHub Container Registry.
 4. `04-deploy-staging.png` - Summary do smoke test de staging.
 5. `05-staging-funcionando.png` - respostas de health e info do staging.

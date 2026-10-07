@@ -42,7 +42,7 @@ Pré-requisitos: Docker e Docker Compose v2.
 
 | Job | Quando roda | O que faz |
 | --- | --- | --- |
-| `build-and-test` | PR e push | `mvn clean verify`: compila e executa 3 testes automatizados (H2 em memória); publica o relatório Surefire como artefato |
+| `build-and-test` | PR e push | `mvn clean verify`: compila e executa 4 testes automatizados (H2 em memória); publica o relatório Surefire como artefato |
 | `docker-image` | após os testes | Faz o build da imagem Docker e publica no GitHub Container Registry (GHCR) com a tag do commit; em PRs apenas valida o build |
 | `deploy-staging` | push na `main` | Baixa a imagem do GHCR, sobe app + PostgreSQL com o profile `staging` e executa o *smoke test* (health, info, POST e GET) |
 | `deploy-production` | após staging aprovado | Sobe a **mesma imagem** validada em staging com o profile `production` (banco, rede e volume próprios) e executa o smoke test |

@@ -6,12 +6,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 class IniciativaControllerTest {
     @Autowired
     MockMvc mvc;
@@ -43,5 +45,11 @@ class IniciativaControllerTest {
         mvc.perform(get("/actuator/health"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("UP"));
+    }
+
+    @Test
+    void endpointInfoEstaExposto() throws Exception {
+        mvc.perform(get("/actuator/info"))
+                .andExpect(status().isOk());
     }
 }

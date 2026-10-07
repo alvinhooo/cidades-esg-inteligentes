@@ -269,7 +269,7 @@ def build():
         table(
             [
                 ["Job", "Dependência", "Resultado"],
-                ["build-and-test", "Código", "Compilação, 3 testes e relatório Surefire"],
+                ["build-and-test", "Código", "Compilação, 4 testes e relatório Surefire"],
                 ["docker-image", "Testes aprovados", "Imagem única publicada no GHCR"],
                 ["deploy-staging", "Imagem publicada", "Compose, PostgreSQL e smoke test"],
                 ["deploy-production", "Staging aprovado", "Mesma imagem promovida e validada"],
@@ -314,7 +314,7 @@ def build():
     story += [
         p("4 Testes e validação automatizada", "Section"),
         p(
-            "O Maven executa três testes de integração com Spring Boot, MockMvc e H2: criação e listagem de iniciativa, retorno 404 para atualização inexistente e disponibilidade do Actuator. O smoke test de cada deploy valida health, identificação do ambiente, escrita e leitura no PostgreSQL."
+            "O Maven executa quatro testes de integração com Spring Boot, MockMvc e H2: criação e listagem de iniciativa, retorno 404 para atualização inexistente, health e exposição do endpoint info do Actuator. O smoke test de cada deploy valida saúde, identificação do ambiente, escrita e leitura no PostgreSQL."
         ),
         table(
             [
@@ -345,7 +345,7 @@ def build():
     story += [p("6 Evidências da execução", "Section")]
     evidence = [
         ("01-pipeline-completo.png", "Figura 1 - Pipeline completo com os quatro jobs aprovados."),
-        ("02-build-e-testes.png", "Figura 2 - Build e três testes automatizados concluídos sem falhas."),
+        ("02-build-e-testes.png", "Figura 2 - Build e quatro testes automatizados concluídos sem falhas."),
         ("03-imagem-ghcr.png", "Figura 3 - Imagem versionada publicada no GHCR."),
         ("04-deploy-staging.png", "Figura 4 - Deploy e smoke test de staging aprovados."),
         ("05-staging-funcionando.png", "Figura 5 - Health e identificação do ambiente staging."),
