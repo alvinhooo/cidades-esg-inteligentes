@@ -113,6 +113,10 @@ O procedimento para obter e nomear as capturas está em [`docs/EVIDENCIAS.md`](d
 ![Deploy produção](docs/evidencias/06-deploy-producao.png)
 ![Produção funcionando](docs/evidencias/07-producao-funcionando.png)
 
+### Funcionamento local
+![Health check local com status UP](docs/evidencias/08-health-local.png)
+![API local listando iniciativa ESG cadastrada](docs/evidencias/09-api-iniciativas-local.png)
+
 ## Tecnologias utilizadas
 
 - Java 21, Spring Boot 3.3, Spring Web, Spring Data JPA e Actuator
@@ -154,5 +158,5 @@ Exemplo de criação (`POST /api/iniciativas`):
 | Pipeline com etapas de build, teste e deploy | ☑ |
 | README.md com instruções e links verificáveis | ☑ |
 | Documentação técnica em PDF | ☑ |
-| Prints anexados ao README e ao PDF | ☐ *(marcar após adicionar os sete arquivos em `docs/evidencias/`)* |
+| Prints anexados ao README e ao PDF | ☐ *(pipeline e duas evidências locais anexados; faltam as seis capturas detalhadas do CI/CD)* |
 | Deploy realizado nos ambientes staging e produção | ☑ |

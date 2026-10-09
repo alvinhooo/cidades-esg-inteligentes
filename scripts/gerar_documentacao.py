@@ -343,7 +343,7 @@ def build():
     ]
 
     story += [p("6 Evidências da execução", "Section")]
-    evidence = [
+    required_evidence = [
         ("01-pipeline-completo.png", "Figura 1 - Pipeline completo com os quatro jobs aprovados."),
         ("02-build-e-testes.png", "Figura 2 - Build e quatro testes automatizados concluídos sem falhas."),
         ("03-imagem-ghcr.png", "Figura 3 - Imagem versionada publicada no GHCR."),
@@ -352,13 +352,23 @@ def build():
         ("06-deploy-producao.png", "Figura 6 - Deploy e smoke test de produção aprovados."),
         ("07-producao-funcionando.png", "Figura 7 - Health e identificação do ambiente production."),
     ]
-    included = 0
-    for filename, caption in evidence:
+    supplementary_evidence = [
+        ("08-health-local.png", "Figura 8 - Aplicação local saudável, com status UP no Spring Actuator."),
+        ("09-api-iniciativas-local.png", "Figura 9 - API local listando a iniciativa ESG cadastrada."),
+    ]
+    required_included = 0
+    for filename, caption in required_evidence:
         blocks = evidence_image(filename, caption)
         if blocks:
             story.extend(blocks)
-            included += 1
-    if included == 0:
+            required_included += 1
+    supplementary_included = 0
+    for filename, caption in supplementary_evidence:
+        blocks = evidence_image(filename, caption)
+        if blocks:
+            story.extend(blocks)
+            supplementary_included += 1
+    if required_included == 0 and supplementary_included == 0:
         story += [
             p(
                 "A execução e seus artefatos são verificáveis diretamente nos endereços abaixo. O guia docs/EVIDENCIAS.md descreve as sete capturas exigidas para a versão de submissão."
@@ -391,7 +401,8 @@ def build():
                 ["README com execução, arquitetura e evidências", "OK"],
                 ["Documentação técnica em PDF", "OK"],
                 ["Evidências automáticas por execução", "OK"],
-                ["Capturas anexadas ao PDF", f"{included}/7"],
+                ["Capturas obrigatórias do CI/CD", f"{required_included}/7"],
+                ["Evidências locais complementares", f"{supplementary_included}/2"],
             ],
             [12.2 * cm, 4.1 * cm],
         ),

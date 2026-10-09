@@ -23,3 +23,11 @@ Salve as imagens em `docs/evidencias/` com estes nomes:
 7. `07-producao-funcionando.png` - respostas de health e info da produção.
 
 Não use imagens simuladas. As capturas devem vir da execução cujo SHA aparece na tag da imagem e nos nomes dos artefatos.
+
+## Evidências já anexadas
+
+- `01-pipeline-completo.png`: execução nº 10 com build, imagem, staging e produção aprovados.
+- `08-health-local.png`: aplicação local respondendo com `status: UP`.
+- `09-api-iniciativas-local.png`: API local listando uma iniciativa ESG cadastrada.
+
+Ainda faltam as capturas obrigatórias numeradas de `02` a `07`.
