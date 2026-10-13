@@ -156,7 +156,6 @@ Exemplo de criação (`POST /api/iniciativas`):
 | Dockerfile funcional | ☑ |
 | docker-compose.yml ou arquivos Kubernetes | ☑ |
 | Pipeline com etapas de build, teste e deploy | ☑ |
-| README.md com instruções e links verificáveis | ☑ |
-| Documentação técnica em PDF | ☑ |
-| Prints anexados ao README e ao PDF | ☐ *(pipeline e duas evidências locais anexados; faltam as seis capturas detalhadas do CI/CD)* |
+| README.md com instruções e prints | ☑ |
+| Documentação técnica com evidências (PDF ou PPT) | ☑ |
 | Deploy realizado nos ambientes staging e produção | ☑ |
