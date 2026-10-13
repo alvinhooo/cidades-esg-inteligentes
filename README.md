@@ -88,7 +88,7 @@ Estratégias adotadas:
 
 Orquestração (`docker-compose.yml`): dois *profiles* (`staging` e `production`), cada um com **aplicação + PostgreSQL 16**, **volume** próprio para dados (`postgres-staging`, `postgres-production`), **rede** isolada (`staging-net`, `production-net`) e **variáveis de ambiente** vindas do `.env`. A aplicação só inicia após o banco ficar saudável (`depends_on` + `healthcheck`).
 
-## Evidências do funcionamento
+## Prints do funcionamento
 
 As evidências verificáveis ficam disponíveis na [execução final aprovada do pipeline](https://github.com/alvinhooo/cidades-esg-inteligentes/actions/runs/37678226458) e incluem:
 
